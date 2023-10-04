@@ -58,7 +58,7 @@ public class TicketService {
         SeatAvailabilityEntryDto seatAvailabilityEntryDto = new SeatAvailabilityEntryDto(trainId , from , to);
 
         int seatsAvailable = trainService.availlableSeats(new SeatAvailabilityEntryDto(bookTicketEntryDto.getTrainId(),bookTicketEntryDto.getFromStation(),bookTicketEntryDto.getToStation()));
-        if(seatsAvailable < seatsNeeeded)throw new Exception();
+        if(seatsAvailable < seatsNeeeded)throw new Exception("Less tickets are available");
 
         //route validation
         Optional<Train> response = trainRepository.findById(trainId);
@@ -74,7 +74,7 @@ public class TicketService {
             else if(arr[i].equals(to.toString()))toInd = i;
         }
 //        System.out.println(fromInd + " " +toInd);
-        if(fromInd == -1 || toInd == -1 || toInd < fromInd)throw new Exception();
+        if(fromInd == -1 || toInd == -1 || toInd < fromInd)throw new Exception("Invalid stations");
         int totalFare = 300 * (toInd - fromInd - 1);
 
 
