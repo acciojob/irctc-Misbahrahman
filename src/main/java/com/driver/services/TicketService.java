@@ -58,11 +58,11 @@ public class TicketService {
         SeatAvailabilityEntryDto seatAvailabilityEntryDto = new SeatAvailabilityEntryDto(trainId , from , to);
 
         int seatsAvailable = trainService.availlableSeats(new SeatAvailabilityEntryDto(bookTicketEntryDto.getTrainId(),bookTicketEntryDto.getFromStation(),bookTicketEntryDto.getToStation()));
-        if(seatsAvailable < seatsNeeeded)throw new CustomException("Less tickets are available");
+        if(seatsAvailable < seatsNeeeded)throw new Exception();
 
         //route validation
         Optional<Train> response = trainRepository.findById(trainId);
-        if(!response.isPresent())throw new CustomException("Train id + " + trainId + " is Wrong!!");
+        if(!response.isPresent())throw new Exception();
         Train train = response.get();
         String route = train.getRoute();
         String[] arr = route.split(",");
@@ -74,7 +74,7 @@ public class TicketService {
             else if(arr[i].equals(to.toString()))toInd = i;
         }
 //        System.out.println(fromInd + " " +toInd);
-        if(fromInd == -1 || toInd == -1 || toInd < fromInd)throw new CustomException("Invalid stations");
+        if(fromInd == -1 || toInd == -1 || toInd < fromInd)throw new Exception();
         int totalFare = 300 * (toInd - fromInd - 1);
 
 
@@ -88,7 +88,7 @@ public class TicketService {
         List<Integer> ids = bookTicketEntryDto.getPassengerIds();
         for(int x : ids) {
             Optional<Passenger> res = passengerRepository.findById(x);
-            if (!res.isPresent()) throw new CustomException("Passenger Id " + x + " Is not in Database");
+            if (!res.isPresent()) throw new Exception();
             Passenger passenger = res.get();
             ticket.getPassengersList().add(passenger);
             passenger.getBookedTickets().add(ticket);
